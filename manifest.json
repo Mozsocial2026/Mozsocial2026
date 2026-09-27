@@ -1,9 +1,9 @@
 {
   "name": "MOZ SOCIAL",
   "short_name": "MOZ SOCIAL",
-  "start_url": "./",
+  "description": "A tua rede social de Moçambique",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#008000",
-  "description": "A tua rede social"
+  "theme_color": "#008000"
 }
