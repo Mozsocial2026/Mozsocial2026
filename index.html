@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOZ SOCIAL</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background: #e9ebee;
+            color: #1c1e21;
+        }
+
+        header {
+            background: linear-gradient(135deg, #008000, #00b300);
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .conteudo {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 15px 60px;
+        }
+
+        .conteudo h2 {
+            color: #008000;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 16px;
+            margin: 5px 3px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            background: #e4e6eb;
+            color: #1c1e21;
+            transition: all 0.15s ease;
+        }
+
+        button:hover {
+            filter: brightness(0.95);
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        .conteudo > button {
+            background: white;
+            color: #008000;
+            border: 2px solid #008000;
+            border-radius: 25px;
+            padding: 10px 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #008000;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus {
+            border-color: #008000;
+        }
+
+        .post {
+            background: white;
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: left;
+            animation: aparecer 0.3s ease;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .post p {
+            font-size: 15px;
+            line-height: 1.5;
+            margin: 0 0 10px;
+            word-wrap: break-word;
+        }
+
+        .post img, .post video {
+            max-width: 100%;
+            margin-top: 8px;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .data-post {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .curtir {
+            background: #e91e63;
+            color: white;
+        }
+
+        .curtir.curtido {
+            background: #4caf50;
+            color: white;
+        }
+
+        .comentar {
+            background: #2196f3;
+            color: white;
+        }
+
+        .eliminar {
+            background: #cc0000;
+            color: white;
+        }
+
+        .area-comentarios {
+            margin-top: 12px;
+            padding: 10px;
+            background: #f0f2f5;
+            border-radius: 10px;
+        }
+
+        .lista-comentarios {
+            margin-bottom: 10px;
+        }
+
+        .comentario {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            border-radius: 18px;
+            font-size: 14px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .apagar-comentario {
+            background: transparent;
+            color: #cc0000;
+            font-size: 14px;
+            padding: 2px 6px;
+            margin: 0;
+            border-radius: 50%;
+        }
+
+        .apagar-comentario:hover {
+            background: #ffe5e5;
+        }
+
+        .input-comentario {
+            width: calc(100% - 90px);
+            margin-right: 6px;
+        }
+
+        .enviar-comentario {
+            background: #008000;
+            color: white;
+            padding: 9px 18px;
+        }
+
+        #fotoPerfil {
+            max-width: 160px;
+            border-radius: 50%;
+            display: block;
+            margin: 15px auto;
+            border: 4px solid #008000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 500px) {
+            header h1 { font-size: 22px; }
+            .conteudo > button { padding: 8px 14px; font-size: 13px; }
+            .post { padding: 12px; }
+            button { padding: 9px 12px; font-size: 13px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>MOZ SOCIAL 🇲🇿</h1>
+        <p>A tua rede social</p>
+    </header>
+
+    <div class="conteudo">
+
+        <h2>Bem-vindo à MOZ SOCIAL!</h2>
+
+        <button onclick="inicio()">🏠 Início</button>
+        <button onclick="publicar()">➕ Publicar</button>
+        <button onclick="mostrarPerfil()">👤 Perfil</button>
+
+        <div id="areaPublicacao"></div>
+        <div id="publicacoes"></div>
+
+    </div>
+
+    <script>
+        // ===== FUNÇÕES AUXILIARES =====
+
+        function criarID() {
+            return "pub_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+        }
+
+        function tempoAtras(timestamp) {
+            if (!timestamp) return "";
+
+            const agora = Date.now();
+            const diff = Math.floor((agora - timestamp) / 1000);
+
+            if (diff < 60) return "agora mesmo";
+            if (diff < 3600) return "há " + Math.floor(diff / 60) + " min";
+            if (diff < 86400) return "há " + Math.floor(diff / 3600) + " h";
+            if (diff < 172800) return "ontem";
+            if (diff < 604800) return "há " + Math.floor(diff / 86400) + " dias";
+
+            const data = new Date(timestamp);
+            return data.toLocaleDateString("pt-PT");
+        }
+
+        function getCurtidasFeitas() {
+            return JSON.parse(localStorage.getItem("curtidasFeitas") || "[]");
+        }
+
+        function setCurtidasFeitas(lista) {
+            localStorage.setItem("curtidasFeitas", JSON.stringify(lista));
+        }
+
+        // ===== FUNÇÕES PRINCIPAIS =====
+
+        function inicio() {
+            document.getElementById("publicacoes").style.display = "block";
+            document.getElementById("areaPublicacao").innerHTML = `
+                <h2>🏠 Início</h2>
+                <h3>Bem-vindo à MOZ SOCIAL! 🇲🇿</h3>
+                <p>A tua rede social de Moçambique.</p>
+                <p>Partilha os teus momentos, fotos e vídeos!</p>
+                <hr>
+                <p>🌍 As tuas publicações aparecerão aqui.</p>
+            `;
+            carregarPublicacao();
+        }
+
+        function publicar() {
+            document.getElementById("areaPublicacao").innerHTML = `
+                <div>
+                    <h2>Nova publicação</h2>
+                    <textarea id="textoPublicacao" placeholder="Escreve a tua publicação..."></textarea>
+                    <br>
+                    <input type="file" id="ficheiro" accept="image/*,video/*">
+                    <br>
+                    <button onclick="enviarPublicacao()">📤 Publicar</button>
+                </div>
+            `;
+        }
+
+        function enviarPublicacao() {
+            let texto = document.getElementById("textoPublicacao").value;
+            let ficheiro = document.getElementById("ficheiro").files[0];
+
+            if (texto.trim() === "" && !ficheiro) {
+                alert("Escreve um texto ou escolhe uma foto/vídeo!");
+                return;
+            }
+
+            if (ficheiro) {
+                if (ficheiro.type.startsWith("image/")) {
+                    const leitor = new FileReader();
+                    leitor.onload = function (e) {
+                        guardarPublicacao(texto, e.target.result, "imagem");
+                    };
+                    leitor.readAsDataURL(ficheiro);
+                } else if (ficheiro.type.startsWith("video/")) {
+                    const leitor = new FileReader();
+                    leitor.onload = function (e) {
+                        guardarPublicacao(texto, e.target.result, "video");
+                    };
+                    leitor.readAsDataURL(ficheiro);
+                }
+            } else {
+                guardarPublicacao(texto, null, null);
+            }
+        }
+
+        function guardarPublicacao(texto, media, tipoMedia) {
+            let publicacoes = JSON.parse(localStorage.getItem("publicacoes") || "[]");
+
+            publicacoes.push({
+                id: criarID(),
+                texto: texto,
+                curtidas: 0,
+                media: media,
+                tipo: tipoMedia,
+                comentarios: [],
+                data: Date.now()
+            });
+
+            try {
+                localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+            } catch (e) {
+                alert("⚠️ Ficheiro muito grande! O navegador não conseguiu guardar.");
+                return;
+            }
+
+            document.getElementById("areaPublicacao").innerHTML = "";
+            carregarPublicacao();
+            alert("Publicação feita com sucesso! 🇲🇿");
+        }
+
+        function carregarPublicacao() {
+            let publicacoes = JSON.parse(localStorage.getItem("publicacoes") || "[]");
+
+            let alterou = false;
+            publicacoes = publicacoes.map(function (p) {
+                if (typeof p === "string") {
+                    alterou = true;
+                    return { id: criarID(), texto: p, curtidas: 0, media: null, tipo: null, comentarios: [], data: Date.now() };
+                }
+                if (!p.id) { p.id = criarID(); alterou = true; }
+                if (!p.comentarios) { p.comentarios = []; alterou = true; }
+                if (!p.data) { p.data = Date.now(); alterou = true; }
+                return p;
+            });
+            if (alterou) {
+                localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+            }
+
+            document.getElementById("publicacoes").innerHTML = "";
+
+            publicacoes.forEach(function (pub) {
+
+                if ((!pub.texto || pub.texto.trim() === "") && !pub.media) return;
+
+                let post = document.createElement("div");
+                post.className = "post";
+
+                if (pub.data) {
+                    let dataSpan = document.createElement("span");
+                    dataSpan.className = "data-post";
+                    dataSpan.textContent = tempoAtras(pub.data);
+                    post.appendChild(dataSpan);
+                }
+
+                if (pub.texto && pub.texto.trim() !== "") {
+                    let paragrafo = document.createElement("p");
+                    paragrafo.textContent = pub.texto;
+                    post.appendChild(paragrafo);
+                }
+
+                if (pub.media && pub.tipo === "imagem") {
+                    let img = document.createElement("img");
+                    img.src = pub.media;
+                    post.appendChild(img);
+                } else if (pub.media && pub.tipo === "video") {
+                    let video = document.createElement("video");
+                    video.src = pub.media;
+                    video.controls = true;
+                    post.appendChild(video);
+                }
+
+                let curtidasFeitas = getCurtidasFeitas();
+                let jaCurtiu = curtidasFeitas.includes(pub.id);
+
+                let botaoCurtir = document.createElement("button");
+                botaoCurtir.className = "curtir" + (jaCurtiu ? " curtido" : "");
+                botaoCurtir.textContent = jaCurtiu
+                    ? "💚 Curtido (" + (pub.curtidas || 0) + ")"
+                    : "❤️ Curtir (" + (pub.curtidas || 0) + ")";
+
+                botaoCurtir.onclick = function () {
+                    let lista = JSON.parse(localStorage.getItem("publicacoes") || "[]");
+                    let feitas = getCurtidasFeitas();
+                    let i = lista.findIndex(function (x) { return x.id === pub.id; });
+                    if (i === -1) return;
+
+                    if (feitas.includes(pub.id)) {
+                        lista[i].curtidas = Math.max(0, (lista[i].curtidas || 0) - 1);
+                        feitas = feitas.filter(function (x) { return x !== pub.id; });
+                    } else {
+                        lista[i].curtidas = (lista[i].curtidas || 0) + 1;
+                        feitas.push(pub.id);
+                    }
+
+                    localStorage.setItem("publicacoes", JSON.stringify(lista));
+                    setCurtidasFeitas(feitas);
+                    carregarPublicacao();
+                };
+                post.appendChild(botaoCurtir);
+
+                let botaoComentar = document.createElement("button");
+                botaoComentar.textContent = "💬 Comentar (" + (pub.comentarios.length) + ")";
+                botaoComentar.className = "comentar";
+                post.appendChild(botaoComentar);
+
+                let botaoEliminar = document.createElement("button");
+                botaoEliminar.textContent = "🗑️ Eliminar";
+                botaoEliminar.className = "eliminar";
+                botaoEliminar.onclick = function () {
+                    if (confirm("Deseja eliminar esta publicação?")) {
+                        let lista = JSON.parse(localStorage.getItem("publicacoes") || "[]");
+                        lista = lista.filter(function (x) { return x.id !== pub.id; });
+                        localStorage.setItem("publicacoes", JSON.stringify(lista));
+
+                        let feitas = getCurtidasFeitas();
+                        feitas = feitas.filter(function (x) { return x !== pub.id; });
+                        setCurtidasFeitas(feitas);
+
+                        carregarPublicacao();
+                    }
+                };
+                post.appendChild(botaoEliminar);
+
+                let areaComentarios = document.createElement("div");
+                areaComentarios.className = "area-comentarios";
+                areaComentarios.style.display = "none";
+
+                let listaComentarios = document.createElement("div");
+                listaComentarios.className = "lista-comentarios";
+
+                pub.comentarios.forEach(function (comentario) {
+                    let item = document.createElement("div");
+                    item.className = "comentario";
+
+                    let span = document.createElement("span");
+                    span.textContent = comentario;
+                    item.appendChild(span);
+
+                    let botaoApagar = document.createElement("button");
+                    botaoApagar.textContent = "❌";
+                    botaoApagar.className = "apagar-comentario";
+                    botaoApagar.onclick = function () {
+                        let lista = JSON.parse(localStorage.getItem("publicacoes") || "[]");
+                        let i = lista.findIndex(function (x) { return x.id === pub.id; });
+                        if (i === -1) return;
+
+                        lista[i].comentarios = lista[i].comentarios.filter(function (c) {
+                            return c !== comentario;
+                        });
+                        localStorage.setItem("publicacoes", JSON.stringify(lista));
+                        carregarPublicacao();
+                    };
+                    item.appendChild(botaoApagar);
+
+                    listaComentarios.appendChild(item);
+                });
+
+                areaComentarios.appendChild(listaComentarios);
+
+                let inputComentario = document.createElement("input");
+                inputComentario.type = "text";
+                inputComentario.placeholder = "Escreve um comentário...";
+                inputComentario.className = "input-comentario";
+                areaComentarios.appendChild(inputComentario);
+
+                let botaoEnviarComentario = document.createElement("button");
+                botaoEnviarComentario.textContent = "Enviar";
+                botaoEnviarComentario.className = "enviar-comentario";
+                botaoEnviarComentario.onclick = function () {
+                    let texto = inputComentario.value.trim();
+                    if (texto === "") return;
+
+                    let lista = JSON.parse(localStorage.getItem("publicacoes") || "[]");
+                    let i = lista.findIndex(function (x) { return x.id === pub.id; });
+                    if (i === -1) return;
+
+                    lista[i].comentarios.push(texto);
+                    localStorage.setItem("publicacoes", JSON.stringify(lista));
+                    carregarPublicacao();
+                };
+                areaComentarios.appendChild(botaoEnviarComentario);
+
+                post.appendChild(areaComentarios);
+
+                botaoComentar.onclick = function () {
+                    areaComentarios.style.display =
+                        areaComentarios.style.display === "none" ? "block" : "none";
+                };
+
+                document.getElementById("publicacoes").appendChild(post);
+            });
+        }
+
+        function mostrarPerfil() {
+            document.getElementById("publicacoes").style.display = "none";
+            document.getElementById("areaPublicacao").innerHTML = `
+                <h2>Meu Perfil</h2>
+                <p>Nome: Casimiro</p>
+                <input type="file" accept="image/*" onchange="mostrarFoto(event)">
+                <img id="fotoPerfil" style="max-width:200px; display:block; margin-top:10px;">
+                <p>🇲🇿 MOZ SOCIAL</p>
+            `;
+            const fotoGuardada = localStorage.getItem("fotoPerfil");
+            if (fotoGuardada) {
+                document.getElementById("fotoPerfil").src = fotoGuardada;
+            }
+        }
+
+        function mostrarFoto(event) {
+            const arquivo = event.target.files[0];
+            if (!arquivo) return;
+
+            const leitor = new FileReader();
+            leitor.onload = function (e) {
+                localStorage.setItem("fotoPerfil", e.target.result);
+                const foto = document.getElementById("fotoPerfil");
+                if (foto) foto.src = e.target.result;
+            };
+            leitor.readAsDataURL(arquivo);
+        }
+
+        // ===== ARRANQUE =====
+        window.onload = function () {
+            inicio();
+        };
+        
+    </script>
+
+</body>
+  </html>
